@@ -30,15 +30,17 @@ module washing_machine_ctrl #(
     end
     always @* begin
         inlet_valve=0; wash_motor=0; drain_pump=0; rinse_motor=0; spin_motor=0; done=0;
-        case(state)
-            FILL:inlet_valve=1;
-            WASH:wash_motor=1;
-            DRAIN:drain_pump=1;
-            RINSE:begin inlet_valve=1; rinse_motor=1; end
-            SPIN:spin_motor=1;
-            COMPLETE:done=1;
-            default:;
-        endcase
+        if (!paused) begin
+            case(state)
+                FILL:inlet_valve=1;
+                WASH:wash_motor=1;
+                DRAIN:drain_pump=1;
+                RINSE:begin inlet_valve=1; rinse_motor=1; end
+                SPIN:spin_motor=1;
+                default:;
+            endcase
+        end
+        if (state==COMPLETE) done=1;
     end
     always @(posedge clk) begin
         if(rst) begin state<=IDLE; paused<=0; tick_count<=0; seconds_left<=0; end
