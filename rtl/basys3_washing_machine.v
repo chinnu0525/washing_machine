@@ -27,9 +27,11 @@ module basys3_washing_machine #(
       .drain_pump(drain_pump),.rinse_motor(rinse_motor),.spin_motor(spin_motor),
       .done(done),.seconds_left(secs));
 
-    wire [7:0] mins=secs/60;
-    wire [7:0] rems=secs%60;
-    wire [15:0] bcd={((mins/10)<<4)|(mins%10),((rems/10)<<4)|(rems%10)};
+    wire [6:0] mins=secs/60;
+    wire [6:0] rems=secs%60;
+    wire [3:0] m_tens=mins/10, m_ones=mins%10;
+    wire [3:0] s_tens=rems/10, s_ones=rems%10;
+    wire [15:0] bcd={m_tens,m_ones,s_tens,s_ones};
     seg7_mux #(.CLK_HZ(CLK_HZ)) display(clk,rst,bcd,seg,an,dp);
 
     assign led=16'b0 |
