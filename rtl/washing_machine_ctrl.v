@@ -19,7 +19,7 @@ module washing_machine_ctrl #(
     reg [31:0] duration;
     reg [2:0] next_state;
     wire sec_tick = (tick_count >= CLK_HZ-1);
-    wire [5:0] selected_count = stage_sw[0]+stage_sw[1]+stage_sw[2]+stage_sw[3]+stage_sw[4];
+    wire [2:0] selected_count = {2'b00,stage_sw[0]} + {2'b00,stage_sw[1]} + {2'b00,stage_sw[2]} + {2'b00,stage_sw[3]} + {2'b00,stage_sw[4]};
 
     always @* begin
         case(state)
